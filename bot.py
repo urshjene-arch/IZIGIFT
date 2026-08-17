@@ -10,10 +10,8 @@ from telethon.sessions import StringSession
 
 
 BOT_TOKEN = os.environ["BOT_TOKEN"]
-
 API_ID = int(os.environ["API_ID"])
 API_HASH = os.environ["API_HASH"]
-
 TELEGRAM_SESSION = os.environ["TELEGRAM_SESSION"]
 
 
@@ -31,20 +29,18 @@ subscribers = set()
 
 @dp.message(CommandStart())
 async def start(message: Message):
-
     subscribers.add(message.chat.id)
 
     await message.answer(
         "🎁 <b>NFT Gift Watcher</b>\n\n"
-        "✅ Ты подписан на уведомления!\n\n"
-        "🔎 Монитор NFT запущен.",
+        "✅ Ты подписан!\n"
+        "🔎 Монитор запущен.",
         parse_mode="HTML"
     )
 
 
 @dp.message(Command("test"))
 async def test(message: Message):
-
     await message.answer(
         "🎁 <b>NFT GIFT UPGRADED!</b>\n\n"
         "👤 <a href=\"tg://user?id=123456789\">@test_user</a>\n"
@@ -59,37 +55,21 @@ async def test(message: Message):
 
 @telegram_client.on(events.NewMessage)
 async def telegram_event(event):
-
-    print("📨 Новое Telegram-событие")
-
-    print(
-        "Chat:",
-        event.chat_id
-    )
-
-    print(
-        "Message:",
-        event.message
-    )
+    print("📨 Получено событие Telegram")
 
 
 async def run_bot():
-
     print("🤖 Bot started")
-
     await dp.start_polling(bot)
 
 
 async def run_monitor():
-
     print("🔎 NFT monitor starting")
 
     await telegram_client.connect()
 
     if not await telegram_client.is_user_authorized():
-
-        print("❌ Telegram session is not authorized!")
-
+        print("❌ TELEGRAM_SESSION не авторизован")
         return
 
     print("✅ Telegram account authorized")
@@ -98,7 +78,6 @@ async def run_monitor():
 
 
 async def main():
-
     await asyncio.gather(
         run_bot(),
         run_monitor()
@@ -106,5 +85,4 @@ async def main():
 
 
 if __name__ == "__main__":
-
     asyncio.run(main())
